@@ -7,11 +7,11 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
 public class Main extends JPanel{
 
-    public static final int WIDTH=420, HEIGHT=420;
+    public static final int WIDTH=20;
     private Timer timer;
-    public static int TWIDTH = 20;
 
 
 
@@ -59,7 +59,7 @@ public class Main extends JPanel{
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        window.setBounds(0, 0, WIDTH, HEIGHT + 22); //(x, y, w, h) 22 due to title bar.
+        window.setBounds(0, 0, WIDTH*21, WIDTH*21 + 22); //(x, y, w, h) 22 due to title bar.
 
         Main panel = new Main();
 
