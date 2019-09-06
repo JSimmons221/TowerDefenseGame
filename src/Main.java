@@ -16,8 +16,6 @@ public class Main extends JPanel{
 
 
     public Main(){
-
-
         timer = new Timer(1000 / 60, e -> update());
         timer.start();
         setKeyListener();
