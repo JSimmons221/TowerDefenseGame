@@ -14,6 +14,6 @@ public class TowerTile extends Tile{
     @Override
     void draw(Graphics2D g2) {
         g2.setColor(new Color(34,149,34));
-        g2.drawRect(x,y,Main.TWIDTH,Main.TWIDTH);
+        g2.drawRect(x,y,Main.WIDTH,Main.WIDTH);
     }
 }
