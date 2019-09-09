@@ -15,11 +15,11 @@ public class Sprite {
     private int speed; //Number of pixels moved each frame.
     private int id;
 
-    public Sprite(int x, int y, int dir) {
+    public Sprite(int x, int y, int dir, int speed) {
         this.loc = new Point(x, y);
         this.dir = dir;
         setPic("blank.png", NORTH);  //Assumes pic is oriented NORTH by default
-        speed = getBoundingRectangle().height;  //moves one height's worth by default.
+        speed = this.speed;
 
         id = nextID;
         nextID++;
@@ -71,53 +71,6 @@ public class Sprite {
     }
 
     /**
-     * Returns a Rectangle object that surrounds this Sprite's pic.
-     * Useful for hit detection.  Really useful.
-     *
-     * @return the bounding Rectangle.
-     */
-    public Rectangle getBoundingRectangle() {
-        Rectangle box = null;
-        if (picOrientation % 180 != 0)
-            if (facingEast() || facingWest())
-                box = new Rectangle(loc.x, loc.y, pic.getHeight(), pic.getWidth());
-            else
-                box = new Rectangle(loc.x, loc.y, pic.getWidth(), pic.getHeight());
-        else if (facingEast() || facingWest())
-            box = new Rectangle(loc.x, loc.y, pic.getWidth(), pic.getHeight());
-        else
-            box = new Rectangle(loc.x, loc.y, pic.getHeight(), pic.getWidth());
-
-        return box;
-
-    }
-
-    /**
-     * Returns the location of this Sprite.
-     *
-     * @return A point object.  Use p.x and p.y or p.getX() and p.getY()
-     */
-    public Point getLoc() {
-        return loc;
-    }
-
-    /**
-     * Changes the location of this Sprite.
-     *
-     * @param loc
-     */
-    public void setLoc(Point loc) {
-        this.loc = loc;
-    }
-
-    /**
-     * @return the direction the Sprite is facing.  See the constants for reference.
-     */
-    public int getDir() {
-        return dir;
-    }
-
-    /**
      * Changes the direction the Sprite is facing to the given angle.
      *
      * @param newDir the new direction measured in degrees
@@ -126,46 +79,8 @@ public class Sprite {
         dir = newDir;
     }
 
-    public BufferedImage getPic() {
-        return pic;
-    }
-
     public void setPic(BufferedImage pic) {
         this.pic = pic;
-    }
-
-    /**
-     * Returns true if this Sprite is facing East, not true EAST, but EAST at all.
-     *
-     * @return Returns true if this Sprite is facing East, not true EAST, but EAST at all.
-     */
-    public boolean facingEast() {
-        return dir % 360 < 90 || dir % 360 > 270;
-    }
-
-    /**
-     * @return Returns true if this Sprite is facing NORTH, not true NORTH, but NORTH at all.
-     */
-    public boolean facingNorth() {
-        return dir % 360 > 0 && dir % 360 < 180;
-    }
-
-    /**
-     * @return Returns true if this Sprite is facing WEST, not true WEST, but WEST at all.
-     */
-    public boolean facingWest() {
-        return dir % 360 > 90 && dir % 360 < 270;
-    }
-
-    /**
-     * @return Returns true if this Sprite is facing SOUTH, not true SOUTH, but SOUTH at all.
-     */
-    public boolean facingSouth() {
-        return dir % 360 > 180;
-    }
-
-    public int getID() {
-        return id;
     }
 
     /**
@@ -173,13 +88,6 @@ public class Sprite {
      */
     public Point getCenterPoint() {
         return new Point(loc.x + pic.getWidth() / 2, loc.y + pic.getHeight() / 2);
-    }
-
-    /**
-     * Returns the current speed of this Sprite
-     */
-    public int getSpeed() {
-        return speed;
     }
 
     /**
