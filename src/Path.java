@@ -12,7 +12,7 @@ public class Path extends Tile{
     @Override
     void draw(Graphics2D g2) {
         g2.setColor(new Color(245,222,179));
-        g2.drawRect(x,y,Main.WIDTH,Main.WIDTH);
+        g2.fillRect(x,y,Main.WIDTH,Main.WIDTH);
     }
 
 }

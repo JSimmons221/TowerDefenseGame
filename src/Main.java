@@ -21,14 +21,12 @@ public class Main extends JPanel{
         timer = new Timer(1000 / 60, e -> update());
         timer.start();
         setKeyListener();
-        map = new Tile[21][21];
-        MapReader.main();
+        map = MapReader.main();
+        update();
 
     }
 
     public void update() {
-
-
         repaint();
     }
 
@@ -36,10 +34,11 @@ public class Main extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-
-
-
-
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                map[i][j].draw(g2);
+            }
+        }
     }
 
     public void setKeyListener(){
@@ -64,7 +63,7 @@ public class Main extends JPanel{
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        window.setBounds(0, 0, WIDTH*21, WIDTH*21 + 22); //(x, y, w, h) 22 due to title bar.
+        window.setBounds(0, 0, WIDTH*21, WIDTH*20 + 22); //(x, y, w, h) 22 due to title bar.
 
         Main panel = new Main();
 
