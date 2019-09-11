@@ -12,6 +12,7 @@ public class Main extends JPanel{
 
     public static final int WIDTH=20;
     private Timer timer;
+    Tile[][] map;
     private int gold, health;
 
 
@@ -20,6 +21,11 @@ public class Main extends JPanel{
         timer = new Timer(1000 / 60, e -> update());
         timer.start();
         setKeyListener();
+        map = new Tile[21][21];
+        for (int i = 2; i < 5; i++) {
+
+        }
+
     }
 
     public void update() {
