@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class Main extends JPanel{
 
-    public static final int WIDTH=20;
+    public static final int WIDTH=40;
     private Timer timer;
     Tile[][] map;
     private int gold, health;
@@ -22,9 +22,7 @@ public class Main extends JPanel{
         timer.start();
         setKeyListener();
         map = new Tile[21][21];
-        for (int i = 2; i < 5; i++) {
-
-        }
+        MapReader.main();
 
     }
 
