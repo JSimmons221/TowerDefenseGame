@@ -2,11 +2,9 @@ import java.awt.*;
 
 public class Path extends Tile{
 
-    boolean walled;
     int x,y;
 
     public Path (int x, int y){
-        walled = false;
         this.x=x;
         this.y=y;
     }

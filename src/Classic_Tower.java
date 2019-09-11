@@ -41,6 +41,6 @@ public class Classic_Tower extends Tower {
         }
         else
             a--;
-            return -1;
+        return -1;
     }
 }

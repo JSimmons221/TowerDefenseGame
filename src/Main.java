@@ -12,6 +12,7 @@ public class Main extends JPanel{
 
     public static final int WIDTH=20;
     private Timer timer;
+    private int gold, health;
 
 
 
