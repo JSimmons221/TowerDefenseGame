@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Main extends JPanel{
 
     public static final int WIDTH=40;
+    int hWIDTH, qWIDTH;
     private Timer timer;
     Tile[][] map;
     ArrayList<Sprite> enemies;
@@ -18,6 +19,8 @@ public class Main extends JPanel{
     public Main(){
         timer = new Timer(1000 / 60, e -> update());
         timer.start();
+        hWIDTH=WIDTH/2;
+        qWIDTH=WIDTH/4;
         setKeyListener();
         setMouseListener();
         map = MapReader.main();
@@ -99,7 +102,8 @@ public class Main extends JPanel{
 
     public void directionChange (){
         for (int i = 0; i < enemies.size(); i++) {
-
+            int x = (int)(enemies.get(i).getCenterPoint().getX());
+            int y = (int)(enemies.get(i).getCenterPoint().getY());
         }
     }
 
