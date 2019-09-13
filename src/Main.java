@@ -1,11 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class Main extends JPanel{
@@ -13,6 +9,8 @@ public class Main extends JPanel{
     public static final int WIDTH=40;
     private Timer timer;
     Tile[][] map;
+    ArrayList<Sprite> enemies;
+    ArrayList<Sprite> decor = new ArrayList<Sprite>();
     private int gold, health;
 
 
@@ -21,12 +19,21 @@ public class Main extends JPanel{
         timer = new Timer(1000 / 60, e -> update());
         timer.start();
         setKeyListener();
+        setMouseListener();
         map = MapReader.main();
+        for (int i = 0; i < 10; i++) {
+            int x=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
+            int y=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
+            decor.add(new Rock1(x,y,decor));
+        }
         update();
 
     }
 
     public void update() {
+//        for (int i = 0; i < enemies.size(); i++) {
+//            if (enemies.get(i).getCenterPoint().getX()<)
+//        }
         repaint();
     }
 
@@ -38,6 +45,9 @@ public class Main extends JPanel{
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j].draw(g2);
             }
+        }
+        for (int i = 0; i < decor.size(); i++) {
+            decor.get(i).draw(g2);
         }
     }
 
@@ -56,6 +66,41 @@ public class Main extends JPanel{
 
             }
         });
+    }
+
+    public void setMouseListener(){
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) { //****************
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+    }
+
+    public void directionChange (){
+        for (int i = 0; i < enemies.size(); i++) {
+
+        }
     }
 
     public static void main(String[] args) {

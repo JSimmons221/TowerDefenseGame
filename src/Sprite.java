@@ -18,19 +18,13 @@ public class Sprite {
     public Sprite(int x, int y, int dir, int speed) {
         this.loc = new Point(x, y);
         this.dir = dir;
-        setPic("blank.png", NORTH);  //Assumes pic is oriented NORTH by default
+        setPic("Blank.png", NORTH);  //Assumes pic is oriented NORTH by default
         speed = this.speed;
 
         id = nextID;
         nextID++;
     }
 
-    /**
-     * Changes the image file that this Sprite uses to draw.
-     * Assumes the file is in the res folder.
-     * @param fileName    the case-sensitive file name
-     * @param orientation the direction that the image file is facing
-     */
     public void setPic(String fileName, int orientation) {
         try {
             pic = ImageIO.read(new File("res/" + fileName));
@@ -40,9 +34,34 @@ public class Sprite {
         }
     }
 
-    /**
-     * This draws the image pic at the Point loc, rotated to face dir.
-     */
+    public boolean intersects(Sprite other) {
+        return getBoundingRectangle().intersects(other.getBoundingRectangle());
+    }
+
+    public Rectangle getBoundingRectangle() {
+        Rectangle box = null;
+        if (picOrientation % 180 != 0)
+            if (facingEast() || facingWest())
+                box = new Rectangle(loc.x, loc.y, pic.getHeight(), pic.getWidth());
+            else
+                box = new Rectangle(loc.x, loc.y, pic.getWidth(), pic.getHeight());
+        else if (facingEast() || facingWest())
+            box = new Rectangle(loc.x, loc.y, pic.getWidth(), pic.getHeight());
+        else
+            box = new Rectangle(loc.x, loc.y, pic.getHeight(), pic.getWidth());
+
+        return box;
+
+    }
+    public boolean facingEast() {
+        return dir % 360 < 90 || dir % 360 > 270;
+    }
+
+    public boolean facingWest() {
+        return dir % 360 > 90 && dir % 360 < 270;
+    }
+
+
     public void draw(Graphics2D g2) {
         double rotationRequired = Math.toRadians(picOrientation - dir);
         double halfWidth = pic.getWidth() / 2;
@@ -52,29 +71,16 @@ public class Sprite {
         g2.rotate(-rotationRequired, loc.x + halfWidth, loc.y + halfHeight);
     }
 
-    /**
-     * Moves the pic in the direction the Sprite is facing (dir).
-     */
     public void update() {
         int dx = (int) (Math.cos(Math.toRadians(dir)) * speed);
         int dy = -(int) (Math.sin(Math.toRadians(dir)) * speed);
         loc.translate(dx, dy);
     }
 
-    /**
-     * Changes the direction the Sprite is facing by the given angle.
-     *
-     * @param delta change in angle measured in degrees
-     */
     public void rotateBy(int delta) {
         setDir(dir + delta);
     }
 
-    /**
-     * Changes the direction the Sprite is facing to the given angle.
-     *
-     * @param newDir the new direction measured in degrees
-     */
     public void setDir(int newDir) {
         dir = newDir;
     }
@@ -83,16 +89,14 @@ public class Sprite {
         this.pic = pic;
     }
 
-    /**
-     * Returns the center of this Sprite
-     */
+    public void setLoc(Point loc) {
+        this.loc = loc;
+    }
+
     public Point getCenterPoint() {
         return new Point(loc.x + pic.getWidth() / 2, loc.y + pic.getHeight() / 2);
     }
 
-    /**
-     * Changes the speed of this Sprite
-     */
     public void setSpeed(int newSpeed) {
         speed = newSpeed;
     }
