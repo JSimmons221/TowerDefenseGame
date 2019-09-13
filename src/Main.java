@@ -25,6 +25,7 @@ public class Main extends JPanel{
         setMouseListener();
         enemies.add(new Enemy(WIDTH*3+qWIDTH, 0));
         map = MapReader.main();
+
         for (int i = 0; i < 10; i++) {
             int x=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
             int y=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
