@@ -10,7 +10,7 @@ public class Main extends JPanel{
     int hWIDTH, qWIDTH;
     private Timer timer;
     Tile[][] map;
-    ArrayList<Sprite> enemies;
+    ArrayList<Sprite> enemies = new ArrayList<Sprite>();
     ArrayList<Sprite> decor = new ArrayList<Sprite>();
     private int gold, health;
 
@@ -23,20 +23,21 @@ public class Main extends JPanel{
         qWIDTH=WIDTH/4;
         setKeyListener();
         setMouseListener();
+        enemies.add(new Enemy(WIDTH*3+qWIDTH, 0));
         map = MapReader.main();
         for (int i = 0; i < 10; i++) {
             int x=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
             int y=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
             decor.add(new Rock1(x,y,decor));
         }
-        update();
 
     }
 
     public void update() {
-//        for (int i = 0; i < enemies.size(); i++) {
-//            if (enemies.get(i).getCenterPoint().getX()<)
-//        }
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).update();
+        }
+        directionChange();
         repaint();
     }
 
@@ -52,6 +53,14 @@ public class Main extends JPanel{
         for (int i = 0; i < decor.size(); i++) {
             decor.get(i).draw(g2);
         }
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).draw(g2);
+        }
+
+    }
+
+    public void setActionListener(){
+
     }
 
     public void setKeyListener(){
@@ -104,6 +113,9 @@ public class Main extends JPanel{
         for (int i = 0; i < enemies.size(); i++) {
             int x = (int)(enemies.get(i).getCenterPoint().getX());
             int y = (int)(enemies.get(i).getCenterPoint().getY());
+            if (WIDTH*3<x && x<WIDTH*4 && WIDTH*12<y && y<WIDTH*13){
+                enemies.get(i).setDir(Sprite.EAST);
+            }
         }
     }
 

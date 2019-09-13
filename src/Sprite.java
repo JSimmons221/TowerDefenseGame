@@ -19,7 +19,7 @@ public class Sprite {
         this.loc = new Point(x, y);
         this.dir = dir;
         setPic("Blank.png", NORTH);  //Assumes pic is oriented NORTH by default
-        speed = this.speed;
+        this.speed=speed;
 
         id = nextID;
         nextID++;
@@ -74,6 +74,7 @@ public class Sprite {
     public void update() {
         int dx = (int) (Math.cos(Math.toRadians(dir)) * speed);
         int dy = -(int) (Math.sin(Math.toRadians(dir)) * speed);
+        System.out.println(dx + " " + dy);
         loc.translate(dx, dy);
     }
 
