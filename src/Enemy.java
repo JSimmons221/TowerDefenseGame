@@ -4,8 +4,10 @@ public class Enemy extends Sprite {
 
     public Enemy(){
         super(0,0, Sprite.SOUTH, 5);
-        health=3;
+        health=1;
         setPic("basic-enemy.PNG", Sprite.SOUTH);
     }
+
+
 
 }
