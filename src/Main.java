@@ -14,6 +14,7 @@ public class Main extends JPanel{
     ArrayList<Sprite> enemies = new ArrayList<Sprite>();
     ArrayList<Sprite> decor = new ArrayList<Sprite>();
     private int gold, health;
+    ArrayList<Tower> towers;
 
 
 
@@ -40,6 +41,9 @@ public class Main extends JPanel{
     public void update() {
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).update();
+        }
+        for (int i = 0; i < towers.size(); i++) {
+            towers.get(i).update(enemies);
         }
         directionChange();
         repaint();
