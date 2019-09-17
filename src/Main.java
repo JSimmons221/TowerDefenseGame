@@ -9,6 +9,7 @@ public class Main extends JPanel{
     public static final int WIDTH=40;
     int hWIDTH, qWIDTH;
     private Timer timer;
+    private int countBasic, countFast, countThicc, countBoss;
     Tile[][] map;
     ArrayList<Sprite> enemies = new ArrayList<Sprite>();
     ArrayList<Sprite> decor = new ArrayList<Sprite>();
@@ -17,6 +18,7 @@ public class Main extends JPanel{
 
 
     public Main(){
+        countBasic = 0; countFast = 0; countThicc = 0; countBoss = 0;
         timer = new Timer(1000 / 60, e -> update());
         timer.start();
         hWIDTH=WIDTH/2;
@@ -25,6 +27,7 @@ public class Main extends JPanel{
         setMouseListener();
         enemies.add(new Enemy(WIDTH*3+qWIDTH, 0));
         map = MapReader.main();
+
 
         for (int i = 0; i < 10; i++) {
             int x=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
@@ -42,6 +45,28 @@ public class Main extends JPanel{
         repaint();
     }
 
+    public void enemySpawn(){
+        countBasic += (int)(Math.random()*5);
+        countFast += (int)(Math.random()*5);
+        countThicc += (int)(Math.random()*5);
+
+        if(countBasic == 50){
+            enemies.add(new Enemy(WIDTH*3+qWIDTH,-WIDTH));
+            countBasic = 0;
+        }
+
+        if(countFast == 225){
+            enemies.add(new Fast_Enemy(WIDTH*3+qWIDTH,-WIDTH));
+            countFast = 0;
+        }
+
+        if(countThicc == 225){
+            enemies.add(new Thicc_Enemy(WIDTH*3+qWIDTH,-WIDTH));
+            countFast = 0;
+        }
+
+
+    }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
