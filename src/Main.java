@@ -14,7 +14,7 @@ public class Main extends JPanel{
     ArrayList<Sprite> enemies = new ArrayList<Sprite>();
     ArrayList<Sprite> decor = new ArrayList<Sprite>();
     private int gold, health;
-    ArrayList<Tower> towers;
+    ArrayList<Tower> towers = new ArrayList<Tower>();
 
 
 
@@ -125,6 +125,13 @@ public class Main extends JPanel{
 
             @Override
             public void mousePressed(MouseEvent e) { //****************
+                int x = e.getX();
+                int y = e.getY();
+                if (x/WIDTH<21 && y/WIDTH<21){
+                    for (int i = 0; i < towers.size(); i++) {
+
+                    }
+                }
 
             }
 
@@ -150,6 +157,21 @@ public class Main extends JPanel{
             int x = (int)(enemies.get(i).getCenterPoint().getX());
             int y = (int)(enemies.get(i).getCenterPoint().getY());
             if (WIDTH*3<x && x<WIDTH*4 && WIDTH*12<y && y<WIDTH*13){
+                enemies.get(i).setDir(Sprite.EAST);
+            }
+            if (WIDTH*10<x && x<WIDTH*11 && WIDTH*12<y && y<WIDTH*13){
+                enemies.get(i).setDir(Sprite.NORTH);
+            }
+
+            if (WIDTH*10<x && x<WIDTH*11 && WIDTH*3<y && y<WIDTH*4){
+                enemies.get(i).setDir(Sprite.EAST);
+            }
+
+            if (WIDTH*17<x && x<WIDTH*18 && WIDTH*3<y && y<WIDTH*4){
+                enemies.get(i).setDir(Sprite.EAST);
+            }
+
+            if (WIDTH*17<x && x<WIDTH*18 && WIDTH*17<y && y<WIDTH*18){
                 enemies.get(i).setDir(Sprite.EAST);
             }
         }
