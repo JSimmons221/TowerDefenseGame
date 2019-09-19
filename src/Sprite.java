@@ -74,7 +74,6 @@ public class Sprite {
     public void update() {
         int dx = (int) (Math.cos(Math.toRadians(dir)) * speed);
         int dy = -(int) (Math.sin(Math.toRadians(dir)) * speed);
-        System.out.println(dx + " " + dy);
         loc.translate(dx, dy);
     }
 

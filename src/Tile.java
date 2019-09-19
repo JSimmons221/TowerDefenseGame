@@ -2,6 +2,8 @@ import java.awt.*;
 
 public abstract class Tile {
 
+    boolean filled;
+    boolean selcted;
     int x,y;
 
     abstract void draw(Graphics2D g2);
@@ -25,5 +27,17 @@ public abstract class Tile {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public void setFilled(boolean filled) {
+        this.filled = filled;
+    }
+
+    public boolean isSelcted() {
+        return selcted;
+    }
+
+    public void setSelcted(boolean selcted) {
+        this.selcted = selcted;
     }
 }

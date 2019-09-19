@@ -125,10 +125,21 @@ public class Main extends JPanel{
 
             @Override
             public void mousePressed(MouseEvent e) { //****************
-                int x = e.getX();
-                int y = e.getY();
-                if (x/WIDTH<21 && y/WIDTH<21){
-                    for (int i = 0; i < towers.size(); i++) {
+                int x = e.getX()/WIDTH;
+                int y = e.getY()/WIDTH;
+                System.out.println(x + " " + y);
+
+                for (int i = 0; i < map.length; i++) {
+                    for (int j = 0; j < map[0].length; j++) {
+                        map[i][j].setFilled(false);
+                    }
+                }
+                if (x<21 && y<21){
+                    if (map[x][y].getClass().getSimpleName()=="TowerTile"
+                            && map[x+1][y].getClass().getSimpleName()== "TowerTile"
+                            && map[x][y+1].getClass().getSimpleName()=="TowerTile"
+                            && map[x+1][y+1].getClass().getSimpleName()=="TowerTile"){
+                        System.out.println(1);
 
                     }
                 }
@@ -168,11 +179,11 @@ public class Main extends JPanel{
             }
 
             if (WIDTH*17<x && x<WIDTH*18 && WIDTH*3<y && y<WIDTH*4){
-                enemies.get(i).setDir(Sprite.EAST);
+                enemies.get(i).setDir(Sprite.SOUTH);
             }
 
             if (WIDTH*17<x && x<WIDTH*18 && WIDTH*17<y && y<WIDTH*18){
-                enemies.get(i).setDir(Sprite.EAST);
+                enemies.get(i).setDir(Sprite.WEST);
             }
         }
     }
