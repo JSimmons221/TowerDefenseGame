@@ -1,3 +1,5 @@
+import apple.laf.JRSUIConstants;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -28,7 +30,7 @@ public class Main extends JPanel{
         setMouseListener();
         enemies.add(new Enemy(WIDTH*3+qWIDTH, 0));
         map = MapReader.main();
-
+        towers = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
             int x=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
@@ -45,6 +47,7 @@ public class Main extends JPanel{
         for (int i = 0; i < towers.size(); i++) {
             towers.get(i).update(enemies);
         }
+        enemySpawn();
         directionChange();
         repaint();
     }
@@ -81,17 +84,31 @@ public class Main extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
+
+
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j].draw(g2);
             }
         }
+        //tile lines
+        g2.setColor(Color.black);
+        g2.setStroke(new BasicStroke(1));
+        for (int i = 1; i < 840; i+=40) {
+            for (int j = 1; j < 822; j+=40) {
+                g2.drawLine(i,0,i,822);
+                g2.drawLine(0,j,840,j);
+            }
+        }
+
         for (int i = 0; i < decor.size(); i++) {
             decor.get(i).draw(g2);
         }
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).draw(g2);
         }
+
+
 
     }
 
