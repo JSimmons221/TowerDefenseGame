@@ -74,7 +74,7 @@ public class Main extends JPanel{
         }
 
         if(countBoss == 900){
-            enemies.add(new Thicc_Enemy(WIDTH*3+qWIDTH,-WIDTH));
+            enemies.add(new Boss_Enemy(WIDTH*3+qWIDTH,-WIDTH));
             countBoss = 0;
         }
 
