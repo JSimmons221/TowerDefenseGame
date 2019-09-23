@@ -18,7 +18,8 @@ public class Classic_Tower extends Tower {
     @Override
     void draw(Graphics2D g2){ //FINISH THIS SHITAKI MUSHROOM LATER
         g2.setColor(new Color(153,93,51));
-        g2.fillOval(x,y,10,10); //decide x and y later
+        g2.fillOval(x*Main.WIDTH+Main.qWIDTH,y*Main.WIDTH+Main.qWIDTH,
+                Main.WIDTH*2-Main.hWIDTH,Main.WIDTH*2-Main.hWIDTH);
     }
 
     @Override

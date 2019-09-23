@@ -8,4 +8,11 @@ public abstract class Tower {
     abstract void draw(Graphics2D g2);
     abstract int update(ArrayList<Sprite> enemies);
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
