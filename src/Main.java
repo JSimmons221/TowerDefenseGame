@@ -1,5 +1,3 @@
-import apple.laf.JRSUIConstants;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,7 +7,7 @@ import java.util.ArrayList;
 public class Main extends JPanel{
 
     public static final int WIDTH=40;
-    int hWIDTH, qWIDTH;
+    public static final int hWIDTH=WIDTH/2, qWIDTH= WIDTH/4;
     private Timer timer;
     private int countBasic, countFast, countThicc, countBoss;
     Tile[][] map;
@@ -24,13 +22,13 @@ public class Main extends JPanel{
         countBasic = 0; countFast = 0; countThicc = 0; countBoss = 0;
         timer = new Timer(1000 / 60, e -> update());
         timer.start();
-        hWIDTH=WIDTH/2;
-        qWIDTH=WIDTH/4;
         setKeyListener();
         setMouseListener();
         enemies.add(new Enemy(WIDTH*3+qWIDTH, 0));
         map = MapReader.main();
         towers = new ArrayList<>();
+        towers.add(new Classic_Tower(0,0));
+
 
         for (int i = 0; i < 10; i++) {
             int x=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
@@ -107,6 +105,9 @@ public class Main extends JPanel{
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).draw(g2);
         }
+        for (int i = 0; i < towers.size(); i++) {
+            towers.get(i).draw(g2);
+        }
 
 
 
@@ -144,20 +145,31 @@ public class Main extends JPanel{
             public void mousePressed(MouseEvent e) { //****************
                 int x = e.getX()/WIDTH;
                 int y = e.getY()/WIDTH;
-                System.out.println(x + " " + y);
+                boolean occupied = false;
+                boolean bool1 = false, bool2 = false , bool3 = false , bool4 = false , bool5 = false , bool6 = false;
 
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
                         map[i][j].setFilled(false);
                     }
                 }
-                if (x<21 && y<21){
-                    if (map[x][y].getClass().getSimpleName()=="TowerTile"
-                            && map[x+1][y].getClass().getSimpleName()== "TowerTile"
-                            && map[x][y+1].getClass().getSimpleName()=="TowerTile"
-                            && map[x+1][y+1].getClass().getSimpleName()=="TowerTile"){
-                        System.out.println(1);
 
+                for (int i = 0; i < towers.size(); i++) {
+                    if (towers.get(i).getX()*WIDTH<x*WIDTH || towers.get(i).getX()*WIDTH==x*WIDTH){
+                        if (x*WIDTH<towers.get(i).getX()*WIDTH+2*WIDTH-1){
+                            if (towers.get(i).getY()*WIDTH<y*WIDTH || towers.get(i).getY()*WIDTH==y*WIDTH){
+                                if (y*WIDTH<towers.get(i).getY()*WIDTH+2*WIDTH-1)
+                                    occupied=true;
+                            }
+                        }
+                    }
+                }
+
+                if (x<21 && y<21 && ! occupied){
+                    if (map[y][x].getClass().getSimpleName()=="TowerTile"
+                            && map[y][x+1].getClass().getSimpleName()== "TowerTile"
+                            && map[y][y+1].getClass().getSimpleName()=="TowerTile"
+                            && map[y+1][x+1].getClass().getSimpleName()=="TowerTile"){
                     }
                 }
 
