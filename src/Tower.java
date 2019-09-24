@@ -3,10 +3,17 @@ import java.util.ArrayList;
 
 public abstract class Tower {
 
-    int damage_per_shot, range, speed_of_shot, x, y;
+    int damage_per_shot, x, y;
+    public Tower (int damage_per_shot){
+        this.damage_per_shot=damage_per_shot;
+    }
 
     abstract void draw(Graphics2D g2);
     abstract int update(ArrayList<Enemy> enemies);
+
+    public int getDamage_per_shot() {
+        return damage_per_shot;
+    }
 
     public int getX() {
         return x;

@@ -45,10 +45,11 @@ public class Main extends JPanel{
         for (int i = 0; i < towers.size(); i++) {
             int location = towers.get(i).update(enemies);
             if (location != -1){
-                System.out.println(1);
+                System.out.println(enemies.get(location).healthSubtract(towers.get(i).getDamage_per_shot()));
                 boolean dead = enemies.get(location).healthSubtract(towers.get(i).damage_per_shot);
-                if (dead)
+                if (dead) {
                     enemies.remove(location);
+                }
             }
         }
         enemySpawn();
@@ -172,6 +173,11 @@ public class Main extends JPanel{
                 }
 
                 if (x<21 && y<21 && ! occupied){
+                    for (Tile[] i:map) {
+                        for (Tile t:i){
+                            t.setSelcted(false);
+                        }
+                    }
                     if (map[y][x].getClass().getSimpleName()=="TowerTile"
                             && map[y][x+1].getClass().getSimpleName()== "TowerTile"
                             && map[y+1][x].getClass().getSimpleName()=="TowerTile"

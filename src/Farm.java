@@ -11,6 +11,7 @@ public class Farm extends Tower {
 
 
     public Farm(int x, int y){
+        super (0);
         this.x = x;
         this.y = y;
     }
