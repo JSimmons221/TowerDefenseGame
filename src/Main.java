@@ -168,8 +168,12 @@ public class Main extends JPanel{
                 if (x<21 && y<21 && ! occupied){
                     if (map[y][x].getClass().getSimpleName()=="TowerTile"
                             && map[y][x+1].getClass().getSimpleName()== "TowerTile"
-                            && map[y][y+1].getClass().getSimpleName()=="TowerTile"
+                            && map[y+1][x].getClass().getSimpleName()=="TowerTile"
                             && map[y+1][x+1].getClass().getSimpleName()=="TowerTile"){
+                        map[y][x].setSelcted(true);
+                        map[y][x+1].setSelcted(true);
+                        map[y+1][x].setSelcted(true);
+                        map[y+1][x+1].setSelcted(true);
                     }
                 }
 
