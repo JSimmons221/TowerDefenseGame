@@ -11,7 +11,7 @@ public class Main extends JPanel{
     private Timer timer;
     private int countBasic, countFast, countThicc, countBoss;
     Tile[][] map;
-    ArrayList<Sprite> enemies = new ArrayList<Sprite>();
+    ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     ArrayList<Sprite> decor = new ArrayList<Sprite>();
     private int gold, health;
     ArrayList<Tower> towers = new ArrayList<Tower>();
@@ -43,7 +43,13 @@ public class Main extends JPanel{
             enemies.get(i).update();
         }
         for (int i = 0; i < towers.size(); i++) {
-            towers.get(i).update(enemies);
+            int location = towers.get(i).update(enemies);
+            if (location != -1){
+                System.out.println(1);
+                boolean dead = enemies.get(location).healthSubtract(towers.get(i).damage_per_shot);
+                if (dead)
+                    enemies.remove(location);
+            }
         }
         enemySpawn();
         directionChange();
@@ -92,8 +98,8 @@ public class Main extends JPanel{
         //tile lines
         g2.setColor(Color.black);
         g2.setStroke(new BasicStroke(1));
-        for (int i = 1; i < 840; i+=40) {
-            for (int j = 1; j < 822; j+=40) {
+        for (int i = 0; i < 840; i+=40) {
+            for (int j = 0; j < 822; j+=40) {
                 g2.drawLine(i,0,i,822);
                 g2.drawLine(0,j,840,j);
             }

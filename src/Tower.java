@@ -6,7 +6,7 @@ public abstract class Tower {
     int damage_per_shot, range, speed_of_shot, x, y;
 
     abstract void draw(Graphics2D g2);
-    abstract int update(ArrayList<Sprite> enemies);
+    abstract int update(ArrayList<Enemy> enemies);
 
     public int getX() {
         return x;

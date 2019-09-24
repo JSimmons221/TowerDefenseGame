@@ -22,7 +22,7 @@ public class Farm extends Tower {
     }
 
     @Override
-    int update(ArrayList<Sprite> enemies) {
+    int update(ArrayList<Enemy> enemies) {
         if(a==0){
             bank += goldGen;
             a=10;

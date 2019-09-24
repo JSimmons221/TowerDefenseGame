@@ -8,4 +8,11 @@ public class Enemy extends Sprite {
         setPic("basic-enemy.PNG", Sprite.SOUTH);
     }
 
+    boolean healthSubtract(int damage){
+        health -= damage;
+        if (health == 0)
+            return true;
+        return false;
+    }
+
 }
