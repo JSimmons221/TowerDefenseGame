@@ -63,22 +63,22 @@ public class Main extends JPanel{
         countThicc += (int)(Math.random()*5);
         countBoss ++;
 
-        if(countBasic == 50){
+        if(countBasic >= 50){
             enemies.add(new Enemy(WIDTH*3+qWIDTH,-WIDTH));
             countBasic = 0;
         }
 
-        if(countFast == 225){
+        if(countFast >= 225){
             enemies.add(new Fast_Enemy(WIDTH*3+qWIDTH,-WIDTH));
             countFast = 0;
         }
 
-        if(countThicc == 600){
+        if(countThicc >= 600){
             enemies.add(new Thicc_Enemy(WIDTH*3+qWIDTH,-WIDTH));
             countThicc = 0;
         }
 
-        if(countBoss == 900){
+        if(countBoss >= 900){
             enemies.add(new Boss_Enemy(WIDTH*3+qWIDTH,-WIDTH));
             countBoss = 0;
         }

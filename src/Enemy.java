@@ -10,10 +10,8 @@ public class Enemy extends Sprite {
 
     boolean healthSubtract(int damage){
         health -= damage;
-        System.out.println(health);
-        if (health <= 0) {
+        if (health <= 0)
             return true;
-        }
         return false;
     }
 
