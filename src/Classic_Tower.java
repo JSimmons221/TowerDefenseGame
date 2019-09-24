@@ -30,6 +30,7 @@ public class Classic_Tower extends Tower {
     @Override
     int update(ArrayList<Enemy> enemies){
         boolean shot = false;
+
         if (a == 0){
             for(int i=0; i<enemies.size(); i++){
                 int xdist=(int)(enemies.get(i).getCenterPoint().getX()-x);
