@@ -4,7 +4,10 @@ import java.util.ArrayList;
 public abstract class Tower {
 
     int damage_per_shot, x, y;
+    boolean selected;
+
     public Tower (int damage_per_shot){
+        selected=false;
         this.damage_per_shot=damage_per_shot;
     }
 
@@ -21,5 +24,9 @@ public abstract class Tower {
 
     public int getY() {
         return y;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

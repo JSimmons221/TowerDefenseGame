@@ -15,10 +15,13 @@ public class Main extends JPanel{
     ArrayList<Sprite> decor = new ArrayList<Sprite>();
     private int gold, health;
     ArrayList<Tower> towers = new ArrayList<Tower>();
+    private Point selectedTile;
+    private int selectedTower;
 
 
 
     public Main(){
+        selectedTile = new Point(-1,-1);
         countBasic = 0; countFast = 0; countThicc = 0; countBoss = 0;
         timer = new Timer(1000 / 60, e -> update());
         timer.start();
@@ -28,6 +31,7 @@ public class Main extends JPanel{
         map = MapReader.main();
         towers = new ArrayList<>();
         towers.add(new Classic_Tower(0,0));
+        selectedTower=-1;
 
 
         for (int i = 0; i < 10; i++) {
@@ -155,29 +159,32 @@ public class Main extends JPanel{
                 boolean occupied = false;
                 boolean bool1 = false, bool2 = false , bool3 = false , bool4 = false , bool5 = false , bool6 = false;
 
-                for (int i = 0; i < map.length; i++) {
-                    for (int j = 0; j < map[0].length; j++) {
-                        map[i][j].setFilled(false);
+                for (Tile[] i:map) {
+                    for (Tile t:i){
+                        t.setSelcted(false);
                     }
                 }
+
+                selectedTile.setLocation(-1,-1);
+                if (selectedTower!=-1)
+                    towers.get(selectedTower).setSelected(false);
+                selectedTower=-1;
 
                 for (int i = 0; i < towers.size(); i++) {
                     if (towers.get(i).getX()*WIDTH<x*WIDTH || towers.get(i).getX()*WIDTH==x*WIDTH){
                         if (x*WIDTH<towers.get(i).getX()*WIDTH+2*WIDTH-1){
                             if (towers.get(i).getY()*WIDTH<y*WIDTH || towers.get(i).getY()*WIDTH==y*WIDTH){
-                                if (y*WIDTH<towers.get(i).getY()*WIDTH+2*WIDTH-1)
-                                    occupied=true;
+                                if (y*WIDTH<towers.get(i).getY()*WIDTH+2*WIDTH-1) {
+                                    occupied = true;
+                                    selectedTower=i;
+                                    towers.get(i).setSelected(true);
+                                }
                             }
                         }
                     }
                 }
 
                 if (x<21 && y<21 && ! occupied){
-                    for (Tile[] i:map) {
-                        for (Tile t:i){
-                            t.setSelcted(false);
-                        }
-                    }
                     if (map[y][x].getClass().getSimpleName()=="TowerTile"
                             && map[y][x+1].getClass().getSimpleName()== "TowerTile"
                             && map[y+1][x].getClass().getSimpleName()=="TowerTile"
@@ -186,6 +193,7 @@ public class Main extends JPanel{
                         map[y][x+1].setSelcted(true);
                         map[y+1][x].setSelcted(true);
                         map[y+1][x+1].setSelcted(true);
+                        selectedTile.setLocation(x,y);
                     }
                 }
 
