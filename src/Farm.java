@@ -18,8 +18,12 @@ public class Farm extends Tower {
 
     @Override
     void draw(Graphics2D g2) {
-        g2.setColor(new Color(255,102,102));
-        g2.fillRect(10,10,10,10); //decide this later
+        g2.setColor(new Color(0,255,0));
+        g2.fillRect(x*Main.WIDTH+Main.qWIDTH,y*Main.WIDTH+Main.qWIDTH,Main.WIDTH+Main.hWIDTH,Main.WIDTH+Main.hWIDTH); //decide this later
+        g2.setColor(new Color(139,69,19));
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRect(x*Main.WIDTH+Main.qWIDTH,y*Main.WIDTH+Main.qWIDTH,Main.WIDTH+Main.hWIDTH,Main.WIDTH+Main.hWIDTH);
+        g2.setStroke(new BasicStroke(1));
     }
 
     @Override

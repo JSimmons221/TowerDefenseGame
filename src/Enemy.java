@@ -1,9 +1,9 @@
 public class Enemy extends Sprite {
 
-    int speed, health;
+    int health;
 
-    public Enemy(int x, int y){
-        super(x,y, Sprite.SOUTH, 2);
+    public Enemy(int x, int y, int speed){
+        super(x,y, Sprite.SOUTH, speed);
         health=10;
         setPic("basic-enemy.PNG", Sprite.SOUTH);
     }

@@ -10,6 +10,7 @@ public class Main extends JPanel{
     public static final int hWIDTH=WIDTH/2, qWIDTH= WIDTH/4;
     private Timer timer;
     private int countBasic, countFast, countThicc, countBoss;
+    private int countBasicMax, countFastMax, countThiccMax, countBossMax;
     Tile[][] map;
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     ArrayList<Sprite> decor = new ArrayList<Sprite>();
@@ -17,21 +18,24 @@ public class Main extends JPanel{
     ArrayList<Tower> towers = new ArrayList<Tower>();
     private Point selectedTile;
     private int selectedTower;
+    private int money;
 
 
 
     public Main(){
         selectedTile = new Point(-1,-1);
         countBasic = 0; countFast = 0; countThicc = 0; countBoss = 0;
+        countBasicMax = 200; countFastMax = 900; countThiccMax = 1200; countBossMax = 1800;
         timer = new Timer(1000 / 60, e -> update());
         timer.start();
         setKeyListener();
         setMouseListener();
-        enemies.add(new Enemy(WIDTH*3+qWIDTH, 0));
+        enemies.add(new Enemy(WIDTH*3+qWIDTH, 0,2));
         map = MapReader.main();
         towers = new ArrayList<>();
         towers.add(new Classic_Tower(0,0));
         selectedTower=-1;
+        money = 500;
 
 
         for (int i = 0; i < 10; i++) {
@@ -67,22 +71,22 @@ public class Main extends JPanel{
         countThicc += (int)(Math.random()*5);
         countBoss ++;
 
-        if(countBasic >= 50){
-            enemies.add(new Enemy(WIDTH*3+qWIDTH,-WIDTH));
+        if(countBasic >= countBasicMax){
+            enemies.add(new Enemy(WIDTH*3+qWIDTH,-WIDTH,3));
             countBasic = 0;
         }
 
-        if(countFast >= 225){
+        if(countFast >= countFastMax){
             enemies.add(new Fast_Enemy(WIDTH*3+qWIDTH,-WIDTH));
             countFast = 0;
         }
 
-        if(countThicc >= 600){
+        if(countThicc >= countThiccMax){
             enemies.add(new Thicc_Enemy(WIDTH*3+qWIDTH,-WIDTH));
             countThicc = 0;
         }
 
-        if(countBoss >= 900){
+        if(countBoss >= countBossMax){
             enemies.add(new Boss_Enemy(WIDTH*3+qWIDTH,-WIDTH));
             countBoss = 0;
         }
@@ -120,6 +124,9 @@ public class Main extends JPanel{
             towers.get(i).draw(g2);
         }
 
+        g2.setColor(Color.yellow);
+        g2.drawString("$" + money, Main.WIDTH*19,12);
+
 
 
     }
@@ -136,6 +143,26 @@ public class Main extends JPanel{
             }
             @Override
             public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==49 && selectedTile.getX()!=-1 && money>200){
+                    towers.add(new Classic_Tower((int)(selectedTile.getX()),(int)(selectedTile.getY())));
+                    money-=200;
+                    selectedTile.setLocation(-1,-1);
+                    for (Tile[] i:map) {
+                        for (Tile t:i){
+                            t.setSelcted(false);
+                        }
+                    }
+                }
+                if (e.getKeyCode()==50 && selectedTile.getX()!=-1 && money>100){
+                    towers.add(new Farm((int)(selectedTile.getX()),(int)(selectedTile.getY())));
+                    money-=100;
+                    selectedTile.setLocation(-1,-1);
+                    for (Tile[] i:map) {
+                        for (Tile t:i){
+                            t.setSelcted(false);
+                        }
+                    }
+                }
 
             }
             @Override
