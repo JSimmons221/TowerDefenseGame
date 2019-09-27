@@ -1,43 +1,60 @@
 import java.awt.*;
 
-public abstract class Tile {
+public class Tile {
 
-    boolean filled;
-    boolean selcted;
-    int x,y;
+    private boolean path;
+    private boolean filled;
+    private boolean selected;
+    private int x,y, towerNum;
 
-    abstract void draw(Graphics2D g2);
-
-    @Override
-    public String toString(){
-        return getClass().getSimpleName() + ":x=" + getX() + ",y=" + getY();
+    public Tile (int x,int y, boolean path){
+        this.path=path;
+        this.x=x;
+        this.y=y;
+        selected=false;
+        filled=false;
     }
 
+    public void draw(Graphics2D g2){
+        if (path){
+            g2.setColor(new Color(169,169,169));
+            g2.fillRect(x*Main.WIDTH,y*Main.WIDTH,Main.WIDTH,Main.WIDTH);
+        }else{
+            if (selected){
+                g2.setColor(Color.GREEN);
+                g2.fillRect(x*Main.WIDTH,y*Main.WIDTH,Main.WIDTH,Main.WIDTH);
+            }else{
+                g2.setColor(new Color(105,105,105));
+                g2.fillRect(x*Main.WIDTH,y*Main.WIDTH,Main.WIDTH,Main.WIDTH);
+            }
+        }
+    }
+
+    public boolean isFilled() {
+        return filled;
+    }
+    public boolean isSelected() {
+        return selected;
+    }
     public int getX() {
         return x;
     }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
     }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public void setFilled(boolean filled) {
         this.filled = filled;
     }
-
-    public boolean isSelcted() {
-        return selcted;
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
-
-    public void setSelcted(boolean selcted) {
-        this.selcted = selcted;
+    public int getTowerNum() {
+        return towerNum;
+    }
+    public void setTowerNum(int towerNum) {
+        this.towerNum = towerNum;
+    }
+    public boolean isPath() {
+        return path;
     }
 }

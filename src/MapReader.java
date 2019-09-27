@@ -19,11 +19,11 @@ public class MapReader {
                 String[] chars = line.split("");
                 for(String c : chars){
                     if (c.equals("T")){
-                        map[a/21][a%21]=new TowerTile(a%21*Main.WIDTH, a/21*Main.WIDTH);
+                        map[a/21][a%21]=new Tile(a%21,a/21,false);
                         a++;
                     }
                     if (c.equals("P")){
-                        map[a/21][a%21]=new Path(a%21*Main.WIDTH, a/21*Main.WIDTH);
+                        map[a/21][a%21]=new Tile(a%21,a/21,true);
                         a++;
                     }
                 }

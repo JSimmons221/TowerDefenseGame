@@ -2,167 +2,173 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
+import java.util.Arrays;
 
 public class Main extends JPanel{
 
-    public static final int WIDTH=40;
-    public static final int hWIDTH=WIDTH/2, qWIDTH= WIDTH/4;
+    public static final int WIDTH=40, HWIDTH=WIDTH/2, QWIDTH=WIDTH/4;
     private Timer timer;
-    private int countBasic, countFast, countThicc, countBoss;
-    private int countBasicMax, countFastMax, countThiccMax, countBossMax;
-    Tile[][] map;
-    ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-    ArrayList<Sprite> decor = new ArrayList<Sprite>();
-    private int gold, health;
-    ArrayList<Tower> towers = new ArrayList<Tower>();
-    private Point selectedTile;
+    private Tile[][] map;
+    private int level, levelCounter, enemySpawn, spawnb, spawnf, spawnt, spawnB;
+    private ArrayList<Enemy> enemies;
+    private ArrayList<Tower> towers;
     private int selectedTower;
-    private int money;
+    private Point selectedTile;
+    private int money,health;
 
 
 
     public Main(){
-        selectedTile = new Point(-1,-1);
-        countBasic = 0; countFast = 0; countThicc = 0; countBoss = 0;
-        countBasicMax = 200; countFastMax = 900; countThiccMax = 1200; countBossMax = 1800;
-        timer = new Timer(1000 / 60, e -> update());
+
+        selectedTower=-1;
+        selectedTile = new Point();
+        selectedTile.setLocation(-1,-1);
+
+        timer = new Timer(1000 / 30, e -> update());
         timer.start();
         setKeyListener();
         setMouseListener();
-        enemies.add(new Enemy(WIDTH*3+qWIDTH, 0,2));
+
         map = MapReader.main();
+
+        level=1;
+        levelCounter=0;
+        spawnb=90;
+        spawnf=180;
+        spawnt=270;
+        spawnB=50;
+
+        enemies = new ArrayList<>();
         towers = new ArrayList<>();
-        towers.add(new Classic_Tower(0,0));
-        selectedTower=-1;
-        money = 500;
 
-
-        for (int i = 0; i < 10; i++) {
-            int x=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
-            int y=(int)(Math.random()*(Main.WIDTH/2+Main.WIDTH*20));
-            decor.add(new Rock1(x,y,decor));
-        }
-
+        money=1000;
+        health=200;
     }
 
     public void update() {
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies.get(i).update();
+        for (Enemy e:enemies) {
+            e.update();
         }
-        for (int i = 0; i < towers.size(); i++) {
-            int location = towers.get(i).update(enemies);
-            if (location != -1){
-                System.out.println(enemies.get(location).healthSubtract(towers.get(i).getDamage_per_shot()));
-                boolean dead = enemies.get(location).healthSubtract(towers.get(i).damage_per_shot);
-                if (dead) {
-                    enemies.remove(location);
-                }
-            }
+        for (Tower t:towers){
+            t.update(enemies);
         }
-        enemySpawn();
+        damageEnemies();
+        reachEnd();
         directionChange();
+        spawnEnemies();
         repaint();
     }
 
-    public void enemySpawn(){
-        countBasic += (int)(Math.random()*5);
-        countFast += (int)(Math.random()*5);
-        countThicc += (int)(Math.random()*5);
-        countBoss ++;
-
-        if(countBasic >= countBasicMax){
-            enemies.add(new Enemy(WIDTH*3+qWIDTH,-WIDTH,3));
-            countBasic = 0;
+    public void spawnEnemies(){
+        enemySpawn++;
+        if (enemySpawn%spawnb==0){
+            enemies.add(new BasicEnemy(level));
         }
-
-        if(countFast >= countFastMax){
-            enemies.add(new Fast_Enemy(WIDTH*3+qWIDTH,-WIDTH));
-            countFast = 0;
+        if (enemySpawn%spawnf==0){
+            enemies.add(new FastEnemy(level));
         }
-
-        if(countThicc >= countThiccMax){
-            enemies.add(new Thicc_Enemy(WIDTH*3+qWIDTH,-WIDTH));
-            countThicc = 0;
+        if (enemySpawn%spawnt==0){
+            enemies.add(new ThickEnemy(level));
         }
-
-        if(countBoss >= countBossMax){
-            enemies.add(new Boss_Enemy(WIDTH*3+qWIDTH,-WIDTH));
-            countBoss = 0;
+        if (levelCounter>=spawnB){
+            enemies.add(new BossEnemy(level));
+            enemySpawn=0;
+            spawnb=spawnb*7/8;
+            spawnf=spawnf*7/8;
+            spawnt=spawnt*7/8;
+            spawnB=level*level*50;
+            level++;
         }
-
-
     }
+
+    public void reachEnd(){
+        for (int i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).getCenterPoint().getX()<-WIDTH){
+                if (enemies.get(i).getName()=="BasicEnemy"){
+                    health--;
+                }
+                if (enemies.get(i).getName()=="FastEnemy"){
+                    health-=2;
+                }
+                if (enemies.get(i).getName()=="ThickEnemy"){
+                    health-=10;
+                }
+                if (enemies.get(i).getName()=="BossEnemy")
+                    health-=20;
+                enemies.remove(i);
+                i--;
+            }
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-
-
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                map[i][j].draw(g2);
+        for (int y = 0; y < map.length; y++) {
+            for (int x = 0; x < map[0].length; x++) {
+                map[y][x].draw(g2);
             }
         }
-        //tile lines
-        g2.setColor(Color.black);
-        g2.setStroke(new BasicStroke(1));
-        for (int i = 0; i < 840; i+=40) {
-            for (int j = 0; j < 822; j+=40) {
-                g2.drawLine(i,0,i,822);
-                g2.drawLine(0,j,840,j);
-            }
+        for (int i = 1; i < 21; i++) {
+            g2.setColor(new Color(20,20,20));
+            g2.drawLine(i*WIDTH,0,i*WIDTH,WIDTH*21);
+            g2.drawLine(0,i*WIDTH,WIDTH*20,i*WIDTH);
         }
-
-        for (int i = 0; i < decor.size(); i++) {
-            decor.get(i).draw(g2);
+        for (Enemy e:enemies) {
+            e.draw(g2);
         }
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies.get(i).draw(g2);
+        for (Tower t:towers){
+            t.draw(g2);
         }
-        for (int i = 0; i < towers.size(); i++) {
-            towers.get(i).draw(g2);
-        }
-
+        g2.setFont(new Font("Arial", Font.PLAIN, 20));
         g2.setColor(Color.yellow);
-        g2.drawString("$" + money, Main.WIDTH*19,12);
-
-
-
-    }
-
-    public void setActionListener(){
+        g2.drawString("$" + money, WIDTH*18-QWIDTH,22);
+        g2.setColor(Color.red);
+        g2.drawString("Health:" + health,WIDTH*17-HWIDTH-2,44);
+        g2.setColor(Color.black);
+        g2.drawString("Boss Counter:" + levelCounter + "/" + spawnB,WIDTH*10,22);
+        if (health==0){
+            g2.drawString("GAME OVER", WIDTH*10, WIDTH*10);
+        }
 
     }
 
     public void setKeyListener(){
         addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-            @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode()==49 && selectedTile.getX()!=-1 && money>200){
-                    towers.add(new Classic_Tower((int)(selectedTile.getX()),(int)(selectedTile.getY())));
+                if (selectedTile.getX()!=-1 && e.getKeyCode()==49 && money>=200){
+
+                    map[(int)selectedTile.getY()][(int)selectedTile.getX()].setSelected(false);
+                    map[(int)selectedTile.getY()+1][(int)selectedTile.getX()].setSelected(false);
+                    map[(int)selectedTile.getY()][(int)selectedTile.getX()+1].setSelected(false);
+                    map[(int)selectedTile.getY()+1][(int)selectedTile.getX()+1].setSelected(false);
+
+                    map[(int)selectedTile.getY()][(int)selectedTile.getX()].setFilled(true);
+                    map[(int)selectedTile.getY()+1][(int)selectedTile.getX()].setFilled(true);
+                    map[(int)selectedTile.getY()][(int)selectedTile.getX()+1].setFilled(true);
+                    map[(int)selectedTile.getY()+1][(int)selectedTile.getX()+1].setFilled(true);
+
+                    towers.add(new Tower((int)selectedTile.getX(),(int)selectedTile.getY()));
+
+                    map[(int)selectedTile.getY()][(int)selectedTile.getX()].setTowerNum(towers.size()-1);
+                    map[(int)selectedTile.getY()+1][(int)selectedTile.getX()].setTowerNum(towers.size()-1);
+                    map[(int)selectedTile.getY()][(int)selectedTile.getX()+1].setTowerNum(towers.size()-1);
+                    map[(int)selectedTile.getY()+1][(int)selectedTile.getX()+1].setTowerNum(towers.size()-1);
+
+                    selectedTile.setLocation(-1,-1);
                     money-=200;
-                    selectedTile.setLocation(-1,-1);
-                    for (Tile[] i:map) {
-                        for (Tile t:i){
-                            t.setSelcted(false);
-                        }
-                    }
                 }
-                if (e.getKeyCode()==50 && selectedTile.getX()!=-1 && money>100){
-                    towers.add(new Farm((int)(selectedTile.getX()),(int)(selectedTile.getY())));
-                    money-=100;
-                    selectedTile.setLocation(-1,-1);
-                    for (Tile[] i:map) {
-                        for (Tile t:i){
-                            t.setSelcted(false);
-                        }
-                    }
+                if (selectedTower!=-1 && e.getKeyCode()==49 && money>=towers.get(selectedTower).getUpgradeCost()){
+
+                    money-=towers.get(selectedTower).getUpgradeCost();
+                    towers.get(selectedTower).upgrade();
                 }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
 
             }
             @Override
@@ -175,67 +181,53 @@ public class Main extends JPanel{
     public void setMouseListener(){
         addMouseListener(new MouseListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
 
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) { //****************
-                int x = e.getX()/WIDTH;
-                int y = e.getY()/WIDTH;
-                boolean occupied = false;
-                boolean bool1 = false, bool2 = false , bool3 = false , bool4 = false , bool5 = false , bool6 = false;
-
-                for (Tile[] i:map) {
-                    for (Tile t:i){
-                        t.setSelcted(false);
+                for (Tile[] ta:map){
+                    for (Tile t:ta){
+                        t.setSelected(false);
                     }
                 }
+                for (Tower t: towers){
+                    t.setSelected(false);
+                }
 
-                selectedTile.setLocation(-1,-1);
-                if (selectedTower!=-1)
-                    towers.get(selectedTower).setSelected(false);
-                selectedTower=-1;
+                int x = e.getX()/WIDTH;
+                int y = e.getY()/WIDTH;
 
-                for (int i = 0; i < towers.size(); i++) {
-                    if (towers.get(i).getX()*WIDTH<x*WIDTH || towers.get(i).getX()*WIDTH==x*WIDTH){
-                        if (x*WIDTH<towers.get(i).getX()*WIDTH+2*WIDTH-1){
-                            if (towers.get(i).getY()*WIDTH<y*WIDTH || towers.get(i).getY()*WIDTH==y*WIDTH){
-                                if (y*WIDTH<towers.get(i).getY()*WIDTH+2*WIDTH-1) {
-                                    occupied = true;
-                                    selectedTower=i;
-                                    towers.get(i).setSelected(true);
-                                }
+                if (map[y][x].isFilled()){
+                    selectedTower=map[y][x].getTowerNum();
+                    towers.get(map[y][x].getTowerNum()).setSelected(true);
+                }
+
+                else if (!map[y][x].isPath()){
+                    if (!map[y+1][x].isPath() && !map[y+1][x].isFilled()){
+                        if (!map[y][x+1].isPath() && !map[y][x+1].isFilled()){
+                            if (!map[y+1][x+1].isPath() && !map[y+1][x+1].isFilled()) {
+                                map[y][x].setSelected(true);
+                                map[y + 1][x].setSelected(true);
+                                map[y][x + 1].setSelected(true);
+                                map[y + 1][x + 1].setSelected(true);
+                                selectedTile.setLocation(x,y);
                             }
                         }
                     }
                 }
 
-                if (x<21 && y<21 && ! occupied){
-                    if (map[y][x].getClass().getSimpleName()=="TowerTile"
-                            && map[y][x+1].getClass().getSimpleName()== "TowerTile"
-                            && map[y+1][x].getClass().getSimpleName()=="TowerTile"
-                            && map[y+1][x+1].getClass().getSimpleName()=="TowerTile"){
-                        map[y][x].setSelcted(true);
-                        map[y][x+1].setSelcted(true);
-                        map[y+1][x].setSelcted(true);
-                        map[y+1][x+1].setSelcted(true);
-                        selectedTile.setLocation(x,y);
-                    }
-                }
-
             }
 
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
             @Override
             public void mouseReleased(MouseEvent e) {
 
             }
-
             @Override
             public void mouseEntered(MouseEvent e) {
 
             }
-
             @Override
             public void mouseExited(MouseEvent e) {
 
@@ -243,27 +235,56 @@ public class Main extends JPanel{
         });
     }
 
-    public void directionChange (){
+    public void directionChange(){
+        for (Enemy e:enemies) {
+            if (e.getCenterPoint().getY()>=WIDTH*11+HWIDTH && e.getCenterPoint().getY()<=WIDTH*12
+                    && e.getCenterPoint().getX()<=WIDTH*4){
+                e.setDir(Sprite.EAST);
+            }
+            if (e.getCenterPoint().getY()>=WIDTH*11 && e.getCenterPoint().getY()<=WIDTH*12
+                    && e.getCenterPoint().getX()>=WIDTH*10+HWIDTH && e.getCenterPoint().getX()<=WIDTH*12){
+                e.setDir(Sprite.NORTH);
+            }
+            if (e.getCenterPoint().getY()>=WIDTH*3 && e.getCenterPoint().getY()<=WIDTH*3+HWIDTH
+                    && e.getCenterPoint().getX()>=WIDTH*10 && e.getCenterPoint().getX()<=WIDTH*11){
+                e.setDir(Sprite.EAST);
+            }
+            if (e.getCenterPoint().getY()>=WIDTH*3 && e.getCenterPoint().getY()<=WIDTH*4
+                    && e.getCenterPoint().getX()>=WIDTH*17+HWIDTH && e.getCenterPoint().getX()<=WIDTH*18){
+                e.setDir(Sprite.SOUTH);
+            }
+            if (e.getCenterPoint().getY()>=WIDTH*16+HWIDTH && e.getCenterPoint().getY()<=WIDTH*17
+                    && e.getCenterPoint().getX()>=WIDTH*17 && e.getCenterPoint().getX()<=WIDTH*18){
+                e.setDir(Sprite.WEST);
+            }
+        }
+    }
+
+    public void damageEnemies(){
+        for (Tower t:towers) {
+            int e = t.update(enemies);
+            if (e!=-1){
+                enemies.get(e).looseHealth(t.getDps());
+            }
+        }
         for (int i = 0; i < enemies.size(); i++) {
-            int x = (int)(enemies.get(i).getCenterPoint().getX());
-            int y = (int)(enemies.get(i).getCenterPoint().getY());
-            if (WIDTH*3<x && x<WIDTH*4 && WIDTH*12<y && y<WIDTH*13){
-                enemies.get(i).setDir(Sprite.EAST);
-            }
-            if (WIDTH*10<x && x<WIDTH*11 && WIDTH*12<y && y<WIDTH*13){
-                enemies.get(i).setDir(Sprite.NORTH);
-            }
-
-            if (WIDTH*10<x && x<WIDTH*11 && WIDTH*3<y && y<WIDTH*4){
-                enemies.get(i).setDir(Sprite.EAST);
-            }
-
-            if (WIDTH*17<x && x<WIDTH*18 && WIDTH*3<y && y<WIDTH*4){
-                enemies.get(i).setDir(Sprite.SOUTH);
-            }
-
-            if (WIDTH*17<x && x<WIDTH*18 && WIDTH*17<y && y<WIDTH*18){
-                enemies.get(i).setDir(Sprite.WEST);
+            if (enemies.get(i).isDead()){
+                if (enemies.get(i).getName()=="BasicEnemy"){
+                    levelCounter++;
+                    money+=level*5;
+                }
+                if (enemies.get(i).getName()=="FastEnemy"){
+                    levelCounter+=2;
+                    money+=level*10;
+                }
+                if (enemies.get(i).getName()=="ThickEnemy"){
+                    levelCounter+=2;
+                    money+=level*10;
+                }
+                if (enemies.get(i).getName()=="BossEnemy")
+                    money+=100*level;
+                enemies.remove(i);
+                i--;
             }
         }
     }
@@ -273,7 +294,7 @@ public class Main extends JPanel{
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        window.setBounds(0, 0, WIDTH*21, WIDTH*20 + 22); //(x, y, w, h) 22 due to title bar.
+        window.setBounds(0, 0, WIDTH*20, WIDTH*21 + 22); //(x, y, w, h) 22 due to title bar.
 
         Main panel = new Main();
 
